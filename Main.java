@@ -1,8 +1,62 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 public class Main {
     static Scanner input = new Scanner(System.in);
     static Library library = new Library();
+
+    /*
+    Deletes existing song table and then creates a new one
+     */
+    public static void resetSongTable(){
+        try{
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
+
+            Statement statement = connection.createStatement();
+
+            statement.executeUpdate("drop table if exists songs");
+            statement.executeUpdate("create table songs (id integer, name string, artist string, album string)");
+            System.out.println("Song table reset");
+        }catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    /*
+Deletes existing artist table and then creates a new one
+ */
+    public static void resetArtistTable(){
+        try{
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
+
+            Statement statement = connection.createStatement();
+
+            statement.executeUpdate("drop table if exists artists");
+            statement.executeUpdate("create table artists (id integer, name string, nAlbums integer, nSongs integer)");
+            System.out.println("Artist table reset");
+        }catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    /*
+Deletes existing album table and then creates a new one
+ */
+    public static void resetAlbumTable(){
+        try{
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
+
+            Statement statement = connection.createStatement();
+
+            statement.executeUpdate("drop table if exists albums");
+            statement.executeUpdate("create table albums (id integer, name string, artist integer, nSongs integer)");
+            System.out.println("Album table reset");
+        }catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
 
     /*
     Prompts user to enter the ID of the song they wish to remove from the library
@@ -83,11 +137,12 @@ public class Main {
     }
     public static void displayMenu(){
         System.out.println("Options: " +
-                "\n(1)Add song to libray" +
+                "\n(1)Add song to database" +
                 "\n(2)Create playlist" +
                 "\n(3)Remove song from library" +
                 "\n(4)Display songs in library" +
-                "\n(5)Exit");
+                "\n(5)Reset databases" +
+                "\n(6)Exit");
     }
     public static void interpet(int num){
         if(num == 1){
@@ -97,7 +152,11 @@ public class Main {
         }else if(num == 3){
             removeSongFromLibrary();
         }else if(num == 4){
-            Library.displaySongs();
+            Library.displaySongsFromSQL();
+        }else if(num == 5){
+            resetSongTable();
+            resetAlbumTable();
+            resetArtistTable();
         }
     }
 
@@ -108,7 +167,7 @@ public class Main {
             answer = input.nextInt();
             input.nextLine();
             interpet(answer);
-        }while(answer != 5);
+        }while(answer != 6);
 
     }
 }

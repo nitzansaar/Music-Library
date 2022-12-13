@@ -1,7 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Song extends Entity {
     protected Album album;
@@ -102,16 +99,32 @@ public class Song extends Entity {
 
             Statement statement = connection.createStatement();
 
-            String s = "insert into songs (id, name, album, artist) values (" + this.entityID + ", \"" + this.name + "\", " + album.entityID + ", "
-                    + artist.entityID  + ");";
-            statement.executeUpdate("drop table if exists songs");
-            statement.executeUpdate("create table songs (id integer, name string, artist string, album string)");
+            String s = "insert into songs (id, name, album, artist) values (" + this.entityID + ", \"" + this.name + "\", \"" + this.album.name + "\", \""
+                    + this.artist.name  + "\");";
+
             statement.executeUpdate(s);
             System.out.println("Inserted to SQL");
         }catch (SQLException e) {
             System.err.println(e.getMessage());
         }
 
+    }
+
+    public void fromSQL(){
+        try{
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
+
+            Statement statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery("select * from songs");
+
+            while(resultSet.next()){
+                System.out.println(resultSet.getString("name") +" "+ resultSet.getString("album")+" "
+                        + resultSet.getString("artist"));
+            }
+        }catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
 }

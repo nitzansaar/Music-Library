@@ -184,6 +184,9 @@ Parses a JSON file, creates a song object using the information in the file, and
             System.out.println("Parsing error:" + e);
         }
     }
+    public static void displaySongsFromSQL(){
+        songs.get(0).fromSQL();
+    }
     /*
     Prints out all the songs in the library, including the arist and album names
      */
