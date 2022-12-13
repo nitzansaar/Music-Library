@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -185,7 +186,20 @@ Parses a JSON file, creates a song object using the information in the file, and
         }
     }
     public static void displaySongsFromSQL(){
-        songs.get(0).fromSQL();
+        try{
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
+
+            Statement statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery("select * from songs");
+
+            while(resultSet.next()){
+                System.out.println(resultSet.getString("name") +" "+ resultSet.getString("album")+" "
+                        + resultSet.getString("artist"));
+            }
+        }catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
     /*
     Prints out all the songs in the library, including the arist and album names

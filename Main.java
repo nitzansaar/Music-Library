@@ -34,7 +34,7 @@ Deletes existing artist table and then creates a new one
             Statement statement = connection.createStatement();
 
             statement.executeUpdate("drop table if exists artists");
-            statement.executeUpdate("create table artists (id integer, name string, nAlbums integer, nSongs integer)");
+            statement.executeUpdate("create table artists (id integer, name string)");
             System.out.println("Artist table reset");
         }catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -50,7 +50,7 @@ Deletes existing album table and then creates a new one
             Statement statement = connection.createStatement();
 
             statement.executeUpdate("drop table if exists albums");
-            statement.executeUpdate("create table albums (id integer, name string, artist integer, nSongs integer)");
+            statement.executeUpdate("create table albums (id integer, name string, artist string, nSongs integer)");
             System.out.println("Album table reset");
         }catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -70,6 +70,22 @@ Deletes existing album table and then creates a new one
             input.nextLine();
             System.out.println("Remove another song?(Y/N): ");
         }while(input.next().equalsIgnoreCase("y"));
+    }
+    public static void removeSongFromDatabase(){
+        String songToRemove;
+        System.out.println("Enter the song to remove: ");
+        songToRemove = input.nextLine();
+        try{
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
+
+            Statement statement = connection.createStatement();
+
+            statement.executeUpdate("delete from songs where name = " + songToRemove);
+
+            System.out.println(songToRemove + " removed");
+        }catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     /*
@@ -150,7 +166,8 @@ Deletes existing album table and then creates a new one
         }else if(num == 2){
             createPlaylist();
         }else if(num == 3){
-            removeSongFromLibrary();
+            //removeSongFromLibrary();
+            removeSongFromDatabase();
         }else if(num == 4){
             Library.displaySongsFromSQL();
         }else if(num == 5){
