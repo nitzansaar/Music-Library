@@ -104,11 +104,10 @@ public class Song extends Entity {
 
             Statement statement = connection.createStatement();
 
-            String s = "insert into songs (id, name, album, artist) values (" + this.entityID + ", " + this.name + ", " + album.entityID + ", "
+            String s = "insert into songs (id, name, album, artist) values (" + this.entityID + ", \"" + this.name + "\", " + album.entityID + ", "
                     + artist.entityID  + ");";
-            statement.executeUpdate("drop table if exists songs");
-            statement.executeUpdate("create table songs (id integer, name string, album integer, artist integer)");
             statement.executeUpdate(s);
+            System.out.println("Inserted to SQL");
         }catch (SQLException e) {
             System.err.println(e.getMessage());
         }

@@ -25,21 +25,27 @@ public class Main {
     Creates a song object using the user provided information and adds the song to the library
      */
     public static void addSongToLibrary(){
-        String songName;
-        String artistName;
-        String albumName;
-        String genreType;
-        System.out.print("Enter song name: ");
-        songName = input.nextLine();
-        System.out.print("Enter artist name ");
-        artistName = input.nextLine();
-        System.out.print("Enter album name: ");
-        albumName = input.nextLine();
-        System.out.print("Enter genre: ");
-        genreType = input.nextLine();
-        Song song = new Song(songName, albumName, artistName, genreType);
-        song.toSQL();
-        library.addSong(song);
+        String s;
+        do {
+            String songName;
+            String artistName;
+            String albumName;
+            String genreType;
+            System.out.print("Enter song name: ");
+            songName = input.nextLine();
+            System.out.print("Enter artist name ");
+            artistName = input.nextLine();
+            System.out.print("Enter album name: ");
+            albumName = input.nextLine();
+            System.out.print("Enter genre: ");
+            genreType = input.nextLine();
+            Song song = new Song(songName, albumName, artistName, genreType);
+            song.toSQL();
+            library.addSong(song);
+            System.out.println("Add another song?(Y/N): ");
+            s = input.next();
+            input.nextLine();
+        }while(s.equalsIgnoreCase("y"));
     }
     /*
     Asks user to enter a playlist name and prompts the user to add songs to the playlist
