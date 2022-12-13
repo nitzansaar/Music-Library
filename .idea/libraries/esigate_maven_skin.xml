@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="esigate.maven.skin" type="repository">
+    <properties maven-id="org.esigate.maven:esigate-maven-skin:3.6" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/esigate/maven/esigate-maven-skin/3.6/esigate-maven-skin-3.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

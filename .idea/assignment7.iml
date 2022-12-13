@@ -57,5 +57,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="sqlite-jdbc-3.36.0.3" level="project" />
+    <orderEntry type="library" name="esigate.maven.skin" level="project" />
   </component>
 </module>
