@@ -1,5 +1,10 @@
 package src;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class Song extends Entity {
     protected Album album;
     protected Artist artist;
@@ -68,7 +73,7 @@ public class Song extends Entity {
     }
     public String details(){
         return "(Song: " + this.getName() + " Artist: " +
-                this.artist + ", Album: " + this.album + " Genre: " + this.genre + ") ID: " + this.entityID;
+                this.artist + ", Album: " + this.album + ") ID: " + this.entityID;
     }
     public String toString(){
         return "Song: " + this.title;
@@ -93,9 +98,21 @@ public class Song extends Entity {
     public boolean isLiked(){
         return liked;
     }
-    public String toSQL() {
-        return "insert into songs (id, name, album, artist) values (" + this.entityID + ", " + this.name + ", " + album.entityID + ", "
-                + artist.entityID  + ");";
+    public void toSQL(){
+        try{
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
+
+            Statement statement = connection.createStatement();
+
+            String s = "insert into songs (id, name, album, artist) values (" + this.entityID + ", " + this.name + ", " + album.entityID + ", "
+                    + artist.entityID  + ");";
+            statement.executeUpdate("drop table if exists songs");
+            statement.executeUpdate("create table songs (id integer, name string, album integer, artist integer)");
+            statement.executeUpdate(s);
+        }catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+
     }
 
 }

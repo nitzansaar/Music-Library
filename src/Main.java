@@ -38,7 +38,7 @@ public class Main {
         System.out.print("Enter genre: ");
         genreType = input.nextLine();
         Song song = new Song(songName, albumName, artistName, genreType);
-        song.toSQL();// need to store the song in a SQL database somehow
+        song.toSQL();
         library.addSong(song);
     }
     /*
