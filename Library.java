@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Library {
@@ -31,7 +32,12 @@ public class Library {
         artists = new ArrayList<Artist>();
     }
     public boolean findSong(Song s) {
-        return songs.contains(s);
+        for(int i = 0; i < songs.size(); i++){
+            if(s.equals(songs.get(i))){
+                return true;
+            }
+        }
+        return false;
     }
 
     public ArrayList<Song> getSongs() {
@@ -49,6 +55,25 @@ public class Library {
     }
     public void addArtist(Artist a) {
         artists.add(a);
+    }
+/*
+Removes all songs from library
+ */
+    public static void empty(){
+        songs.removeAll(songs);
+    }
+
+    /*
+    Returns a playlist of a given genre
+     */
+    public static void makePlaylistByGenre(Playlist p, String genre){
+        for(int i = 0; i < songs.size(); i++){// adds all songs of genre to a playlist
+            Song temp = songs.get(i);
+            if(temp.genre.equalsIgnoreCase(genre)){
+                p.addSong(temp);
+            }
+        }
+        p.shuffle();
     }
 
     /*
@@ -185,6 +210,9 @@ Parses a JSON file, creates a song object using the information in the file, and
             System.out.println("Parsing error:" + e);
         }
     }
+    /*
+    Prints the elements within the 'songs' table from the SQL database
+     */
     public static void displaySongsFromSQL(){
         try{
             Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
@@ -194,8 +222,48 @@ Parses a JSON file, creates a song object using the information in the file, and
             ResultSet resultSet = statement.executeQuery("select * from songs");
 
             while(resultSet.next()){
-                System.out.println(resultSet.getString("name") +" "+ resultSet.getString("album")+" "
-                        + resultSet.getString("artist"));
+                System.out.println("Song: " + resultSet.getString("name") +
+                        " Album: " + resultSet.getString("album")+ " Artist: "
+                        + resultSet.getString("artist") + " Genre: " +
+                        resultSet.getString("genre") +
+                        " (ID: " + resultSet.getInt("id") + ")");
+            }
+        }catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    /*
+Prints the elements within the 'artists' table from the SQL database
+ */
+    public static void displayArtistsFromSQL(){
+        try{
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
+
+            Statement statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery("select * from artists");
+
+            while(resultSet.next()){
+                System.out.println(resultSet.getString("name"));
+            }
+        }catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    /*
+Prints the elements within the 'artists' table from the SQL database
+*/
+    public static void displayAlbumsFromSQL(){
+        try{
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
+
+            Statement statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery("select * from artists");
+
+            while(resultSet.next()){
+                System.out.println(resultSet.getString("name") +" "+ resultSet.getString("artist")+" "
+                        + resultSet.getInt("nSongs"));
             }
         }catch (SQLException e) {
             System.err.println(e.getMessage());

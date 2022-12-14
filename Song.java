@@ -56,7 +56,7 @@ public class Song extends Entity {
         this.artist = a;
     }
     public boolean equals(Song other){
-        return this.title.equals(other.title) && this.artist.name.equals(other.artist.name)
+        return this.name.equals(other.name) && this.artist.name.equals(other.artist.name)
                 && this.album.name.equals(other.album.name);
     }
     public boolean possiblyEquals(Song other){
@@ -77,7 +77,7 @@ public class Song extends Entity {
         return "<b> " + this.name + " </b><i> " + this.entityID + "</i>";
     }
     public String toXML(){
-        return "<song id = \"" + this.entityID + "\">\n<title>\n" + this.title + "\n</title>"
+        return "<song id = \"" + this.entityID + "\">\n<title>\n" + this.name + "\n</title>"
                 + "\n<artist id=\"" + this.artist.entityID + "\">\n" + this.artist.name + "\n</artist>"
                 + "\n<album id=\"" + this.album.entityID + "\">\n" + this.album.name + "\n</album>\n</song>";
     }
@@ -99,8 +99,8 @@ public class Song extends Entity {
 
             Statement statement = connection.createStatement();
 
-            String s = "insert into songs (id, name, album, artist) values (" + this.entityID + ", \"" + this.name + "\", \"" + this.album.name + "\", \""
-                    + this.artist.name  + "\");";
+            String s = "insert into songs (id, name, album, artist, genre) values (" + this.entityID + ", \"" + this.name + "\", \"" + this.album.name + "\", \""
+                    + this.artist.name  + "\", \"" + this.genre + "\");";
 
             statement.executeUpdate(s);
             System.out.println("Inserted to SQL");

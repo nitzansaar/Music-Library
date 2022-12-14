@@ -5,7 +5,8 @@ import java.util.Collections;
 import java.util.Random;
 
 public class Playlist extends Entity{
-    private ArrayList<Song> songlist;
+    protected ArrayList<Song> songlist;
+    protected String genre;
     public Playlist(ArrayList<Song> songs){;
         songlist = songs;
     }
@@ -16,7 +17,6 @@ public class Playlist extends Entity{
                 System.out.println(temp.details());
             }
         }
-        System.out.println();
     }
     public ArrayList<Song> getSonglist() {
         return songlist;
@@ -80,9 +80,9 @@ public class Playlist extends Entity{
     public void shuffle(){
         Collections.shuffle(this.songlist);
     }
-    /*
+/*    *//*
     Returns a random playlist of a given genre
-     */
+     *//*
     public Playlist makePlaylistByGenre(String genre){
         Playlist playlist = new Playlist("");
         for(int i = 0; i < this.songlist.size(); i++){// adds all songs of genre to a playlist
@@ -97,7 +97,7 @@ public class Playlist extends Entity{
         Playlist rP = new Playlist("");
         rP.songlist.addAll(playlist.songlist.subList(0,num));//adds a random number of genre songs to a new playlist
         return rP;                                // don't want a playlist consisting of all genre songs, want a "random" playlist instead
-    }
+    }*/
     /*
     Writes a playlist out as an XML file
      */

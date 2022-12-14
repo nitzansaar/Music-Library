@@ -1,3 +1,7 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Artist extends Entity {
@@ -31,9 +35,20 @@ public class Artist extends Entity {
     public void addSong(Song s) {
         songs.add(s);
     }
-    public String toSQL() {
-        return "insert into albums (id, name, nAlbums, nSongs) values (" + this.entityID + ", " + this.name + ", " + this.albums.size() + ", "
-                + this.songs.size() + ");";
+    public void toSQL(){
+        try{
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
+
+            Statement statement = connection.createStatement();
+
+            String s = "insert into artists (id, name) values (" + this.entityID + ", \"" + this.name + "\");";
+
+            statement.executeUpdate(s);
+            System.out.println("Inserted to SQL");
+        }catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+
     }
 
 }

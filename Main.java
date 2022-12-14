@@ -1,13 +1,40 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Scanner;
 
 public class Main {
     static Scanner input = new Scanner(System.in);
     static Library library = new Library();
 
+    /*
+    Reads in songs from the SQL file into new song objects and adds them to the library
+    Allows for easy playlist creation
+     */
+    public static void addSongsToLibFromSQL(){
+        try{
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
+
+            Statement statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery("select * from songs");
+            String songName;
+            String albumName;
+            String artistName;
+            String genre;
+
+            while(resultSet.next()){
+                songName = resultSet.getString("name");
+                albumName = resultSet.getString("album");
+                artistName = resultSet.getString("artist");
+                genre = resultSet.getString("genre");
+                Song temp = new Song(songName, albumName, artistName, genre);
+                if(!library.findSong(temp)) {
+                    library.addSong(temp);
+                }
+            }
+        }catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
     /*
     Deletes existing song table and then creates a new one
      */
@@ -18,7 +45,7 @@ public class Main {
             Statement statement = connection.createStatement();
 
             statement.executeUpdate("drop table if exists songs");
-            statement.executeUpdate("create table songs (id integer, name string, artist string, album string)");
+            statement.executeUpdate("create table songs (id integer, name string, artist string, album string, genre string)");
             System.out.println("Song table reset");
         }catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -57,20 +84,6 @@ Deletes existing album table and then creates a new one
         }
     }
 
-
-    /*
-    Prompts user to enter the ID of the song they wish to remove from the library
-    Loops until the user chooses to exit
-     */
-    public static void removeSongFromLibrary(){
-        do {
-            Library.displaySongs();
-            System.out.print("Enter ID of the song to remove: ");
-            library.removeSong(findSongUsingID(input.nextInt()));
-            input.nextLine();
-            System.out.println("Remove another song?(Y/N): ");
-        }while(input.next().equalsIgnoreCase("y"));
-    }
     public static void removeSongFromDatabase(){
         String songToRemove;
         System.out.println("Enter the song to remove: ");
@@ -80,7 +93,7 @@ Deletes existing album table and then creates a new one
 
             Statement statement = connection.createStatement();
 
-            statement.executeUpdate("delete from songs where name = " + songToRemove);
+            statement.executeUpdate("delete from songs where name = \"" + songToRemove + "\"");
 
             System.out.println(songToRemove + " removed");
         }catch (SQLException e) {
@@ -90,9 +103,9 @@ Deletes existing album table and then creates a new one
 
     /*
     Prompts the user to enter a song name, artist name, album name, and genre
-    Creates a song object using the user provided information and adds the song to the library
+    Creates a song object using the user provided information and adds the song to the library and SQL database
      */
-    public static void addSongToLibrary(){
+    public static void addSongToLibraryAndDataBase(){
         String s;
         do {
             String songName;
@@ -116,6 +129,48 @@ Deletes existing album table and then creates a new one
         }while(s.equalsIgnoreCase("y"));
     }
     /*
+Prompts the user to enter an artist name
+Creates an artist object using the user provided information and adds it to the SQL database
+ */
+    public static void addArtistToDataBase(){
+        String s;
+        do {
+            String artistName;
+            System.out.print("Enter artist name: ");
+            artistName = input.nextLine();
+            Artist artist = new Artist(artistName);
+            artist.toSQL();
+            library.addArtist(artist);
+            System.out.println("Add another artist?(Y/N): ");
+            s = input.next();
+            input.nextLine();
+        }while(s.equalsIgnoreCase("y"));
+    }
+    /*
+Prompts the user to enter an album name, artist name, and number of songs
+Creates an album object using the user provided information and adds it to the SQL database
+*/
+    public static void addAlbumToDataBase(){
+        String s;
+        do {
+            String albumName;
+            String artistName;
+            int nSongs;
+            System.out.print("Enter album name: ");
+            albumName = input.nextLine();
+            System.out.print("Enter artist name ");
+            artistName = input.nextLine();
+            System.out.println("Enter number of songs: ");
+            nSongs = input.nextInt();
+            Album album = new Album(albumName, artistName, nSongs);
+            album.toSQL();
+            library.addAlbum(album);
+            System.out.println("Add another album?(Y/N): ");
+            s = input.next();
+            input.nextLine();
+        }while(s.equalsIgnoreCase("y"));
+    }
+    /*
     Asks user to enter a playlist name and prompts the user to add songs to the playlist
     Loops until the user wishes to stop adding songs
      */
@@ -124,10 +179,8 @@ Deletes existing album table and then creates a new one
         System.out.print("Enter playlist name: ");
         playlistName = input.nextLine();
         Playlist playlist = new Playlist(playlistName);
-        if(library.getSongs().size() == 0){
-            System.out.print("You can't add songs to your playlist because your library is empty\n");
-            return;
-        }
+        //Library.displaySongsFromSQL();
+        addSongsToLibFromSQL();
         Library.displaySongs();
         do {
             System.out.print("Enter song ID to add to playlist: ");
@@ -136,6 +189,24 @@ Deletes existing album table and then creates a new one
         }while(input.next().equalsIgnoreCase("y"));
         System.out.println("You created playlist \" " + playlistName + " \"");
         playlist.printSongList();
+    }
+    public static void generateGenrePlaylist(){
+        addSongsToLibFromSQL();
+        String playlistName;
+        String genre;
+        String filename;
+        System.out.print("Enter playlist name: ");
+        playlistName = input.nextLine();
+        System.out.print("Enter playlist genre: ");
+        genre = input.nextLine();
+        Playlist playlist = new Playlist(playlistName);
+        Library.makePlaylistByGenre(playlist, genre);
+
+        System.out.println("You created playlist \" " + playlistName + " \"");
+        playlist.printSongList();
+        System.out.println("Enter XML filename: ");
+        filename = input.next();
+        playlist.playlistToXMLFile(filename);
     }
     /*
     Locates and returns a song based on its Entity ID
@@ -151,29 +222,54 @@ Deletes existing album table and then creates a new one
         System.out.println("Error: song isn't in library");
         return null;
     }
+    /*
+    Displays menu with text based commands
+     */
     public static void displayMenu(){
         System.out.println("Options: " +
                 "\n(1)Add song to database" +
-                "\n(2)Create playlist" +
-                "\n(3)Remove song from library" +
-                "\n(4)Display songs in library" +
-                "\n(5)Reset databases" +
-                "\n(6)Exit");
+                "\n(2)Add artist to database" +
+                "\n(3)Add album to database" +
+                "\n(4)Create your own playlist" +
+                "\n(5)Generate playlist based on genre and print to XML file" +
+                "\n(6)Generate playlist based on artist and print to XML file" +
+                "\n(7)Remove song from database" +
+                "\n(8)Display songs table in database" +
+                "\n(9)Display artists table in database" +
+                "\n(10)Display albums table in database" +
+                "\n(11)Reset all tables in database" +
+                "\n(12)Exit");
     }
+    /*
+    Takes an integer as input and calls appropriate method
+     */
     public static void interpet(int num){
         if(num == 1){
-            addSongToLibrary();
+            addSongToLibraryAndDataBase();
         }else if(num == 2){
-            createPlaylist();
+            addArtistToDataBase();
         }else if(num == 3){
-            //removeSongFromLibrary();
-            removeSongFromDatabase();
+            addAlbumToDataBase();
         }else if(num == 4){
-            Library.displaySongsFromSQL();
+            createPlaylist();
         }else if(num == 5){
+            generateGenrePlaylist();
+        }else if(num == 6){
+
+        }else if(num == 7){
+            removeSongFromDatabase();
+        }else if(num == 8){
+            Library.displaySongs();
+            Library.displaySongsFromSQL();
+        }else if(num == 9){
+            Library.displayArtistsFromSQL();
+        }else if(num == 10){
+            Library.displayAlbumsFromSQL();
+        }else if(num == 11){
             resetSongTable();
             resetAlbumTable();
             resetArtistTable();
+            Library.empty();
         }
     }
 
@@ -184,7 +280,7 @@ Deletes existing album table and then creates a new one
             answer = input.nextInt();
             input.nextLine();
             interpet(answer);
-        }while(answer != 6);
+        }while(answer != 12);
 
     }
 }
