@@ -291,7 +291,8 @@ public class Main {
             Node IDNode = Node.getAttributes().getNamedItem("id");
             String id = IDNode.getNodeValue();
 
-            String lookupURL = "https://musicbrainz.org/ws/2/recording?artist=" + id;
+            //String lookupURL = "https://musicbrainz.org/ws/2/recording?artist=" + id; this url also works but not as well
+            String lookupURL = "https://musicbrainz.org/ws/2/release/?artist=" + id + "&inc=recordings&fmt=xml";
             URLConnection u2 = new URL(lookupURL).openConnection();
             u2.setRequestProperty("User-Agent", "Application ExampleParser/1.0 (nesaar@dons.usfca.edu");
 
@@ -324,7 +325,8 @@ public class Main {
      * Displays menu with text based commands
      */
     public static void displayMenu(){
-        System.out.println("-----------------\nOptions: " +
+        System.out.println("----------------------------------" +
+                "\nOptions: " +
                 "\n(1)Add song to database" +
                 "\n(2)Add artist to database" +
                 "\n(3)Add album to database" +
