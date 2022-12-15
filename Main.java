@@ -27,7 +27,7 @@ public class Main {
                 artistName = resultSet.getString("artist");
                 genre = resultSet.getString("genre");
                 Song temp = new Song(songName, albumName, artistName, genre);
-                if(!library.findSong(temp)) {
+                if(!library.findSong(temp)) {//if the song isn't in the library, it gets added
                     library.addSong(temp);
                 }
             }
@@ -83,7 +83,9 @@ Deletes existing album table and then creates a new one
             System.err.println(e.getMessage());
         }
     }
-
+    /*
+    Prompts user to enter the song name of which to remove from the SQL database
+     */
     public static void removeSongFromDatabase(){
         String songToRemove;
         System.out.println("Enter the song to remove: ");
@@ -123,6 +125,7 @@ Deletes existing album table and then creates a new one
             Song song = new Song(songName, albumName, artistName, genreType);
             song.toSQL();
             library.addSong(song);
+            System.out.println(songName + " added");
             System.out.println("Add another song?(Y/N): ");
             s = input.next();
             input.nextLine();
@@ -141,6 +144,7 @@ Creates an artist object using the user provided information and adds it to the 
             Artist artist = new Artist(artistName);
             artist.toSQL();
             library.addArtist(artist);
+            System.out.println(artistName + " added");
             System.out.println("Add another artist?(Y/N): ");
             s = input.next();
             input.nextLine();
@@ -165,6 +169,7 @@ Creates an album object using the user provided information and adds it to the S
             Album album = new Album(albumName, artistName, nSongs);
             album.toSQL();
             library.addAlbum(album);
+            System.out.println(albumName + " added");
             System.out.println("Add another album?(Y/N): ");
             s = input.next();
             input.nextLine();
@@ -190,6 +195,11 @@ Creates an album object using the user provided information and adds it to the S
         System.out.println("You created playlist \" " + playlistName + " \"");
         playlist.printSongList();
     }
+    /*
+    Prompts user to enter a playlist name and playlist genre
+    Creates playlist of given genre
+    Prompts user to enter the name of an XML file and then prints the newly created playlist to that file
+     */
     public static void generateGenrePlaylist(){
         addSongsToLibFromSQL();
         String playlistName;
@@ -208,6 +218,30 @@ Creates an album object using the user provided information and adds it to the S
         filename = input.next();
         playlist.playlistToXMLFile(filename);
     }
+    /*
+Prompts user to enter a playlist name and an artist name
+Creates playlist of given artist
+Prompts user to enter the name of an XML file and then prints the newly created playlist to that file
+ */
+    public static void generateArtistPlaylist(){
+        addSongsToLibFromSQL();
+        String playlistName;
+        String artistName;
+        String filename;
+        System.out.print("Enter playlist name: ");
+        playlistName = input.nextLine();
+        System.out.print("Enter artist: ");
+        artistName = input.nextLine();
+        Playlist playlist = new Playlist(playlistName);
+        Library.makePlaylistByArtist(playlist, artistName);
+
+        System.out.println("You created playlist \" " + playlistName + " \"");
+        playlist.printSongList();
+        System.out.println("Enter XML filename: ");
+        filename = input.next();
+        playlist.playlistToXMLFile(filename);
+    }
+
     /*
     Locates and returns a song based on its Entity ID
     Prints error message if there is no song in library with specified ID
@@ -237,7 +271,7 @@ Creates an album object using the user provided information and adds it to the S
                 "\n(8)Display songs table in database" +
                 "\n(9)Display artists table in database" +
                 "\n(10)Display albums table in database" +
-                "\n(11)Reset all tables in database" +
+                "\n(11)Reset tables in database and library" +
                 "\n(12)Exit");
     }
     /*
@@ -255,11 +289,10 @@ Creates an album object using the user provided information and adds it to the S
         }else if(num == 5){
             generateGenrePlaylist();
         }else if(num == 6){
-
+            generateArtistPlaylist();
         }else if(num == 7){
             removeSongFromDatabase();
         }else if(num == 8){
-            Library.displaySongs();
             Library.displaySongsFromSQL();
         }else if(num == 9){
             Library.displayArtistsFromSQL();

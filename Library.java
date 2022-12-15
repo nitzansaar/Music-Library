@@ -61,6 +61,7 @@ Removes all songs from library
  */
     public static void empty(){
         songs.removeAll(songs);
+        System.out.println("Library emptied");
     }
 
     /*
@@ -70,6 +71,18 @@ Removes all songs from library
         for(int i = 0; i < songs.size(); i++){// adds all songs of genre to a playlist
             Song temp = songs.get(i);
             if(temp.genre.equalsIgnoreCase(genre)){
+                p.addSong(temp);
+            }
+        }
+        p.shuffle();
+    }
+    /*
+Returns a playlist of a given artist
+ */
+    public static void makePlaylistByArtist(Playlist p, String artistName){
+        for(int i = 0; i < songs.size(); i++){// adds all songs of genre to a playlist
+            Song temp = songs.get(i);
+            if(temp.artist.name.equalsIgnoreCase(artistName)){
                 p.addSong(temp);
             }
         }
