@@ -56,16 +56,16 @@ public class Library {
     public void addArtist(Artist a) {
         artists.add(a);
     }
-/*
-Removes all songs from library
+/**
+ * Removes all songs from library
  */
     public static void empty(){
         songs.removeAll(songs);
         System.out.println("Library emptied");
     }
 
-    /*
-    Returns a playlist of a given genre
+    /**
+     * Returns a playlist of a given genre
      */
     public static void makePlaylistByGenre(Playlist p, String genre){
         for(int i = 0; i < songs.size(); i++){// adds all songs of genre to a playlist
@@ -76,9 +76,9 @@ Removes all songs from library
         }
         p.shuffle();
     }
-    /*
-Returns a playlist of a given artist
- */
+    /**
+     * Returns a playlist of a given artist
+     */
     public static void makePlaylistByArtist(Playlist p, String artistName){
         for(int i = 0; i < songs.size(); i++){// adds all songs of genre to a playlist
             Song temp = songs.get(i);
@@ -89,10 +89,10 @@ Returns a playlist of a given artist
         p.shuffle();
     }
 
-    /*
-    Allows user to remove songs that are "possibly duplicates"
-    - meaning they have the same name and either artist or album is the same
-    - or they have the same artist and album, and the names are the same if converted to lower case and punctuation is ignored
+    /**
+     * Allows user to remove songs that are "possibly duplicates"
+     * - meaning they have the same name and either artist or album is the same
+     * - or they have the same artist and album, and the names are the same if converted to lower case and punctuation is ignored
      */
     public static void removePossibleDuplicates(){
         Scanner sc = new Scanner(System.in);
@@ -112,9 +112,9 @@ Returns a playlist of a given artist
             }
         }
     }
-    /*
-    Allows user to remove songs that are "definitely duplicates"
-    - means that the songs have the same title, artist, and album
+    /**
+     * Allows user to remove songs that are "definitely duplicates"
+     * - means that the songs have the same title, artist, and album
      */
     public static void removeDefDuplicates(){
         Scanner sc = new Scanner(System.in);
@@ -141,9 +141,9 @@ Returns a playlist of a given artist
         sb.append(child.getNodeValue());
         return sb.toString();
     }
-    /*
-Parses a JSON file, creates a song object using the information in the file, and adds the song to the library
- */
+    /**
+     * Parses a JSON file, creates a song object using the information in the file, and adds the song to the library
+     */
     public static void parseJSON(String filename){
         System.out.println("Parsing JSON file...");
         String string;
@@ -173,8 +173,8 @@ Parses a JSON file, creates a song object using the information in the file, and
             System.out.println("Parser error");
         }
     }
-    /*
-    Parses an XML file, creates a song object using the information in the file, and adds the song to the library
+    /**
+     * Parses an XML file, creates a song object using the information in the file, and adds the song to the library
      */
     public static void parseXML(String filename){
         System.out.println("Parsing XML file...");
@@ -223,8 +223,8 @@ Parses a JSON file, creates a song object using the information in the file, and
             System.out.println("Parsing error:" + e);
         }
     }
-    /*
-    Prints the elements within the 'songs' table from the SQL database
+    /**
+     * Prints the elements within the 'songs' table from the SQL database
      */
     public static void displaySongsFromSQL(){
         try{
@@ -245,9 +245,9 @@ Parses a JSON file, creates a song object using the information in the file, and
             System.err.println(e.getMessage());
         }
     }
-    /*
-Prints the elements within the 'artists' table from the SQL database
- */
+    /**
+     * Prints the elements within the 'artists' table from the SQL database
+     */
     public static void displayArtistsFromSQL(){
         try{
             Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
@@ -263,9 +263,9 @@ Prints the elements within the 'artists' table from the SQL database
             System.err.println(e.getMessage());
         }
     }
-    /*
-Prints the elements within the 'artists' table from the SQL database
-*/
+    /**
+     * Prints the elements within the 'artists' table from the SQL database
+     */
     public static void displayAlbumsFromSQL(){
         try{
             Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
@@ -282,8 +282,8 @@ Prints the elements within the 'artists' table from the SQL database
             System.err.println(e.getMessage());
         }
     }
-    /*
-    Prints out all the songs in the library, including the arist and album names
+    /**
+     * Prints out all the songs in the library, including the arist and album names
      */
     public static void displaySongs(){
         if(songs.size() > 0) {
@@ -296,9 +296,9 @@ Prints the elements within the 'artists' table from the SQL database
             System.out.println("Your library is empty, add some songs to use functionality");
         }
     }
-    /*
-Writes the entire library out as an XML file
-*/
+    /**
+     * Writes the entire library out as an XML file
+     */
     public static void libraryToXMLFile(String filename) {
         try {
             System.out.println("Writing to XML file...");
@@ -315,9 +315,9 @@ Writes the entire library out as an XML file
             throw new RuntimeException(e);
         }
     }
-    /*
-    Writes the entire library out as a JSON file
- */
+    /**
+     * Writes the entire library out as a JSON file
+     */
     public static void libraryToJSONFile(String filename) {
         try {
             System.out.println("Writing to JSON file...");

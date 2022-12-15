@@ -35,8 +35,8 @@ public class Playlist extends Entity{
             System.out.printf("%s is not in the playlist\n", s.toString());
         }
     }
-    /*
-    Merges two playlists into one playlist containing all songs of both playlist without any duplicate songs
+    /**
+     * Merges two playlists into one playlist containing all songs of both playlist without any duplicate songs
      */
     public static Playlist merge(Playlist p1, Playlist p2){
         ArrayList<Song> songArrayList = new ArrayList<>(p1.songlist);
@@ -57,8 +57,8 @@ public class Playlist extends Entity{
         return new Playlist(songArrayList);
     }
 
-    /*
-    Sorts a list of songs by putting the liked songs in front
+    /**
+     * Sorts a list of songs by putting the liked songs in front
      */
     public void putLikedSongsInFront(){
         ArrayList<Song> likedSongs = new ArrayList<>();
@@ -74,32 +74,14 @@ public class Playlist extends Entity{
         likedSongs.addAll(notLikedSongs);// combine the two lists with the liked songs in front
         this.songlist = likedSongs;
     }
-    /*
-    Randomly shuffles a playlist
+    /**
+     * Randomly shuffles a playlist
      */
     public void shuffle(){
         Collections.shuffle(this.songlist);
     }
-/*    *//*
-    Returns a random playlist of a given genre
-     *//*
-    public Playlist makePlaylistByGenre(String genre){
-        Playlist playlist = new Playlist("");
-        for(int i = 0; i < this.songlist.size(); i++){// adds all songs of genre to a playlist
-            Song temp = this.songlist.get(i);
-            if(temp.getGenre().equalsIgnoreCase(genre)){
-                playlist.addSong(temp);
-            }
-        }
-        playlist.shuffle();
-        Random random = new Random();
-        int num = random.nextInt(playlist.songlist.size()) + 1;
-        Playlist rP = new Playlist("");
-        rP.songlist.addAll(playlist.songlist.subList(0,num));//adds a random number of genre songs to a new playlist
-        return rP;                                // don't want a playlist consisting of all genre songs, want a "random" playlist instead
-    }*/
-    /*
-    Writes a playlist out as an XML file
+    /**
+     * Writes a playlist out as an XML file
      */
     public void playlistToXMLFile(String filename) {
         try {
@@ -117,9 +99,9 @@ public class Playlist extends Entity{
             throw new RuntimeException(e);
         }
     }
-    /*
-Writes a playlist out as a JSON file
- */
+    /**
+     * Writes a playlist out as a JSON file
+     */
     public void playlistToJSONFile(String filename) {
         try {
             System.out.println("Writing to JSON file...");

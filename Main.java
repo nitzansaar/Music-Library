@@ -5,9 +5,9 @@ public class Main {
     static Scanner input = new Scanner(System.in);
     static Library library = new Library();
 
-    /*
-    Reads in songs from the SQL file into new song objects and adds them to the library
-    Allows for easy playlist creation
+    /**
+     * Reads in songs from the SQL file into new song objects and adds them to the library
+     * Allows for easy playlist creation
      */
     public static void addSongsToLibFromSQL(){
         try{
@@ -35,8 +35,8 @@ public class Main {
             System.err.println(e.getMessage());
         }
     }
-    /*
-    Deletes existing song table and then creates a new one
+    /**
+     * Deletes existing song table and then creates a new one
      */
     public static void resetSongTable(){
         try{
@@ -51,9 +51,9 @@ public class Main {
             System.err.println(e.getMessage());
         }
     }
-    /*
-Deletes existing artist table and then creates a new one
- */
+    /**
+     * Deletes existing artist table and then creates a new one
+     */
     public static void resetArtistTable(){
         try{
             Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
@@ -67,9 +67,9 @@ Deletes existing artist table and then creates a new one
             System.err.println(e.getMessage());
         }
     }
-    /*
-Deletes existing album table and then creates a new one
- */
+    /**
+     * Deletes existing album table and then creates a new one
+     */
     public static void resetAlbumTable(){
         try{
             Connection connection = DriverManager.getConnection("jdbc:sqlite:music.db");
@@ -83,8 +83,8 @@ Deletes existing album table and then creates a new one
             System.err.println(e.getMessage());
         }
     }
-    /*
-    Prompts user to enter the song name of which to remove from the SQL database
+    /**
+     * Prompts user to enter the song name of which to remove from the SQL database
      */
     public static void removeSongFromDatabase(){
         String songToRemove;
@@ -103,9 +103,9 @@ Deletes existing album table and then creates a new one
         }
     }
 
-    /*
-    Prompts the user to enter a song name, artist name, album name, and genre
-    Creates a song object using the user provided information and adds the song to the library and SQL database
+    /**
+     * Prompts the user to enter a song name, artist name, album name, and genre
+     * Creates a song object using the user provided information and adds the song to the library and SQL database
      */
     public static void addSongToLibraryAndDataBase(){
         String s;
@@ -131,10 +131,10 @@ Deletes existing album table and then creates a new one
             input.nextLine();
         }while(s.equalsIgnoreCase("y"));
     }
-    /*
-Prompts the user to enter an artist name
-Creates an artist object using the user provided information and adds it to the SQL database
- */
+    /**
+     * Prompts the user to enter an artist name
+     * Creates an artist object using the user provided information and adds it to the SQL database
+     */
     public static void addArtistToDataBase(){
         String s;
         do {
@@ -150,10 +150,10 @@ Creates an artist object using the user provided information and adds it to the 
             input.nextLine();
         }while(s.equalsIgnoreCase("y"));
     }
-    /*
-Prompts the user to enter an album name, artist name, and number of songs
-Creates an album object using the user provided information and adds it to the SQL database
-*/
+    /**
+     * Prompts the user to enter an album name, artist name, and number of songs
+     * Creates an album object using the user provided information and adds it to the SQL database
+     */
     public static void addAlbumToDataBase(){
         String s;
         do {
@@ -175,9 +175,9 @@ Creates an album object using the user provided information and adds it to the S
             input.nextLine();
         }while(s.equalsIgnoreCase("y"));
     }
-    /*
-    Asks user to enter a playlist name and prompts the user to add songs to the playlist
-    Loops until the user wishes to stop adding songs
+    /**
+     * Asks user to enter a playlist name and prompts the user to add songs to the playlist
+     * Loops until the user wishes to stop adding songs
      */
     public static void createPlaylist(){
         String playlistName;
@@ -195,10 +195,10 @@ Creates an album object using the user provided information and adds it to the S
         System.out.println("You created playlist \" " + playlistName + " \"");
         playlist.printSongList();
     }
-    /*
-    Prompts user to enter a playlist name and playlist genre
-    Creates playlist of given genre
-    Prompts user to enter the name of an XML file and then prints the newly created playlist to that file
+    /**
+     * Prompts user to enter a playlist name and playlist genre
+     * Creates playlist of given genre
+     * Prompts user to enter the name of an XML file and then prints the newly created playlist to that file
      */
     public static void generateGenrePlaylist(){
         addSongsToLibFromSQL();
@@ -218,11 +218,11 @@ Creates an album object using the user provided information and adds it to the S
         filename = input.next();
         playlist.playlistToXMLFile(filename);
     }
-    /*
-Prompts user to enter a playlist name and an artist name
-Creates playlist of given artist
-Prompts user to enter the name of an XML file and then prints the newly created playlist to that file
- */
+    /**
+     * Prompts user to enter a playlist name and an artist name
+     * Creates playlist of given artist
+     * Prompts user to enter the name of an XML file and then prints the newly created playlist to that file
+     */
     public static void generateArtistPlaylist(){
         addSongsToLibFromSQL();
         String playlistName;
@@ -242,9 +242,9 @@ Prompts user to enter the name of an XML file and then prints the newly created 
         playlist.playlistToXMLFile(filename);
     }
 
-    /*
-    Locates and returns a song based on its Entity ID
-    Prints error message if there is no song in library with specified ID
+    /**
+     * Locates and returns a song based on its Entity ID
+     * Prints error message if there is no song in library with specified ID
      */
     public static Song findSongUsingID(int ID){
         for(int i = 0; i < library.getSongs().size(); i++){
@@ -256,8 +256,8 @@ Prompts user to enter the name of an XML file and then prints the newly created 
         System.out.println("Error: song isn't in library");
         return null;
     }
-    /*
-    Displays menu with text based commands
+    /**
+     * Displays menu with text based commands
      */
     public static void displayMenu(){
         System.out.println("Options: " +
@@ -274,8 +274,8 @@ Prompts user to enter the name of an XML file and then prints the newly created 
                 "\n(11)Reset tables in database and library" +
                 "\n(12)Exit");
     }
-    /*
-    Takes an integer as input and calls appropriate method
+    /**
+     * Takes an integer as input and calls appropriate method
      */
     public static void interpet(int num){
         if(num == 1){
