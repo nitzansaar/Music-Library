@@ -184,7 +184,6 @@ public class Main {
         System.out.print("Enter playlist name: ");
         playlistName = input.nextLine();
         Playlist playlist = new Playlist(playlistName);
-        //Library.displaySongsFromSQL();
         addSongsToLibFromSQL();
         Library.displaySongs();
         do {
