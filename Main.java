@@ -126,11 +126,15 @@ public class Main {
             songName = input.nextLine();
             System.out.print("Enter artist name ");
             artistName = input.nextLine();
+            Artist artist = new Artist(artistName);
             System.out.print("Enter album name: ");
             albumName = input.nextLine();
+            Album album = new Album(albumName, artistName, 0);
             System.out.print("Enter genre: ");
             genreType = input.nextLine();
             Song song = new Song(songName, albumName, artistName, genreType);
+            artist.toSQL();
+            album.toSQL();
             song.toSQL();
             library.addSong(song);
             System.out.println(songName + " added");
@@ -263,7 +267,13 @@ public class Main {
         System.out.println("Error: song isn't in library");
         return null;
     }
-    public static void fillInArtistDetailsFromMusicBrainz(String name){
+
+    /**
+     * Takes input as an artist name and then searches the MusicBrainz database for that artists ID
+     * Using the ID, searches MusicBrainz for all songs by that artist
+     * Prints out all songs so that the user can decide to add to the library or not
+     */
+    public static void printArtistDetailsFromMusicBrainz(String name){
         String initialURL = "https://musicbrainz.org/ws/2/artist?query=" + name + "&fmt=xml";
 
         try {
@@ -280,9 +290,6 @@ public class Main {
             Node Node = artists.item(0).getFirstChild();
             Node IDNode = Node.getAttributes().getNamedItem("id");
             String id = IDNode.getNodeValue();
-            System.out.println(id);
-
-            /* Now let's use that ID to get info specifically about this artist. */
 
             String lookupURL = "https://musicbrainz.org/ws/2/recording?artist=" + id;
             URLConnection u2 = new URL(lookupURL).openConnection();
@@ -293,9 +300,8 @@ public class Main {
 
             NodeList aliases = doc.getElementsByTagName("title");
             for (int i = 0; i < aliases.getLength(); i++) {
-                System.out.println(aliases.item(i).getFirstChild().getNodeValue());
-                Song s = new Song(aliases.item(i).getFirstChild().getNodeValue(), null, name, null);
-                s.toSQL();
+                String songName = aliases.item(i).getFirstChild().getNodeValue();
+                System.out.println("Song: " + songName + " Artist: " + name);
             }
 
         } catch (Exception ex) {
@@ -303,11 +309,14 @@ public class Main {
         }
     }
 
+    /**
+     * Prompts user to enter an artist name and then calls a method which prints out all songs by that artist
+     */
     public static void partiallySpecify(){
         String artistName;
         System.out.print("Enter artist name: ");
         artistName = input.next();
-        fillInArtistDetailsFromMusicBrainz(artistName);
+        printArtistDetailsFromMusicBrainz(artistName);
 
 
     }
@@ -315,7 +324,7 @@ public class Main {
      * Displays menu with text based commands
      */
     public static void displayMenu(){
-        System.out.println("Options: " +
+        System.out.println("-----------------\nOptions: " +
                 "\n(1)Add song to database" +
                 "\n(2)Add artist to database" +
                 "\n(3)Add album to database" +
@@ -326,7 +335,7 @@ public class Main {
                 "\n(8)Display songs table in database" +
                 "\n(9)Display artists table in database" +
                 "\n(10)Display albums table in database" +
-                "\n(11)Partially specify artist" +
+                "\n(11)Partially specify artist and show all songs" +
                 "\n(12)Reset tables in database and library" +
                 "\n(13)Exit");
     }

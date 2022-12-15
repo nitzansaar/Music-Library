@@ -272,11 +272,10 @@ public class Library {
 
             Statement statement = connection.createStatement();
 
-            ResultSet resultSet = statement.executeQuery("select * from artists");
+            ResultSet resultSet = statement.executeQuery("select * from albums");
 
             while(resultSet.next()){
-                System.out.println(resultSet.getString("name") +" "+ resultSet.getString("artist")+" "
-                        + resultSet.getInt("nSongs"));
+                System.out.println(resultSet.getString("name"));
             }
         }catch (SQLException e) {
             System.err.println(e.getMessage());
