@@ -1,3 +1,11 @@
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.net.URL;
+import java.net.URLConnection;
 import java.sql.*;
 import java.util.Scanner;
 
@@ -255,6 +263,54 @@ public class Main {
         System.out.println("Error: song isn't in library");
         return null;
     }
+    public static void fillInArtistDetailsFromMusicBrainz(String name){
+        String initialURL = "https://musicbrainz.org/ws/2/artist?query=" + name + "&fmt=xml";
+
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            URLConnection u = new URL(initialURL).openConnection();
+
+            u.setRequestProperty("User-Agent", "Application ExampleParser/1.0 (nesaar@dons.usfca.edu");
+
+            Document doc = db.parse(u.getInputStream());
+
+            NodeList artists = doc.getElementsByTagName("artist-list");
+
+            Node Node = artists.item(0).getFirstChild();
+            Node IDNode = Node.getAttributes().getNamedItem("id");
+            String id = IDNode.getNodeValue();
+            System.out.println(id);
+
+            /* Now let's use that ID to get info specifically about this artist. */
+
+            String lookupURL = "https://musicbrainz.org/ws/2/recording?artist=" + id;
+            URLConnection u2 = new URL(lookupURL).openConnection();
+            u2.setRequestProperty("User-Agent", "Application ExampleParser/1.0 (nesaar@dons.usfca.edu");
+
+            db = dbf.newDocumentBuilder();
+            doc = db.parse(u2.getInputStream());
+
+            NodeList aliases = doc.getElementsByTagName("title");
+            for (int i = 0; i < aliases.getLength(); i++) {
+                System.out.println(aliases.item(i).getFirstChild().getNodeValue());
+                Song s = new Song(aliases.item(i).getFirstChild().getNodeValue(), null, name, null);
+                s.toSQL();
+            }
+
+        } catch (Exception ex) {
+            System.out.println("XML parsing error" + ex);
+        }
+    }
+
+    public static void partiallySpecify(){
+        String artistName;
+        System.out.print("Enter artist name: ");
+        artistName = input.next();
+        fillInArtistDetailsFromMusicBrainz(artistName);
+
+
+    }
     /**
      * Displays menu with text based commands
      */
@@ -270,8 +326,9 @@ public class Main {
                 "\n(8)Display songs table in database" +
                 "\n(9)Display artists table in database" +
                 "\n(10)Display albums table in database" +
-                "\n(11)Reset tables in database and library" +
-                "\n(12)Exit");
+                "\n(11)Partially specify artist" +
+                "\n(12)Reset tables in database and library" +
+                "\n(13)Exit");
     }
     /**
      * Takes an integer as input and calls appropriate method
@@ -298,6 +355,8 @@ public class Main {
         }else if(num == 10){
             Library.displayAlbumsFromSQL();
         }else if(num == 11){
+            partiallySpecify();
+        }else if(num == 12){
             resetSongTable();
             resetAlbumTable();
             resetArtistTable();
@@ -312,7 +371,7 @@ public class Main {
             answer = input.nextInt();
             input.nextLine();
             interpet(answer);
-        }while(answer != 12);
+        }while(answer != 13);
 
     }
 }

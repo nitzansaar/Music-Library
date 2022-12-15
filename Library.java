@@ -56,9 +56,9 @@ public class Library {
     public void addArtist(Artist a) {
         artists.add(a);
     }
-/**
- * Removes all songs from library
- */
+    /**
+     * Removes all songs from library
+     */
     public static void empty(){
         songs.removeAll(songs);
         System.out.println("Library emptied");

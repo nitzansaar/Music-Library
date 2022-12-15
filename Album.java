@@ -62,7 +62,7 @@ public class Album extends Entity {
             Statement statement = connection.createStatement();
 
             String s = "insert into albums (id, name, artist, nSongs) values (" + this.entityID + ", \"" + this.name + "\", \"" + this.artist.name + "\"," +
-            this.nSongs + ");";
+                    this.nSongs + ");";
 
             statement.executeUpdate(s);
             System.out.println("Inserted to SQL");
