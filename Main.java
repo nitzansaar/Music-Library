@@ -302,7 +302,7 @@ public class Main {
             NodeList aliases = doc.getElementsByTagName("title");
             for (int i = 0; i < aliases.getLength(); i++) {
                 String songName = aliases.item(i).getFirstChild().getNodeValue();
-                System.out.println("Song: " + songName + " Artist: " + name);
+                System.out.println("Song: " + songName);
             }
 
         } catch (Exception ex) {
@@ -316,8 +316,8 @@ public class Main {
     public static void partiallySpecify(){
         String artistName;
         System.out.print("Enter artist name: ");
-        artistName = input.next();
-        printArtistDetailsFromMusicBrainz(artistName);
+        artistName = input.nextLine();
+        printArtistDetailsFromMusicBrainz(artistName.replaceAll(" ", "_"));
 
 
     }
