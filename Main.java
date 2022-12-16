@@ -337,7 +337,7 @@ public class Main {
                 "\n(8)Display songs table in database" +
                 "\n(9)Display artists table in database" +
                 "\n(10)Display albums table in database" +
-                "\n(11)Partially specify artist and show all songs" +
+                "\n(11)Partially specify artist" +
                 "\n(12)Reset tables in database and library" +
                 "\n(13)Exit");
     }
