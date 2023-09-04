@@ -1,48 +1,63 @@
-Homework #7. Putting it all together.
+# Music Library Management System
 
-Due: December 16, 11:59pm.
+This is a simple music library management system implemented in Java. The system allows you to manage songs, artists, albums, and playlists using a SQL database.
 
-This homework will be graded using specifications grading. There are a sequence of tasks to complete. Grades will be assigned as follows:
+## Classes
 
-    To receive a C, you should complete tasks 1-3
-    To receive a B, complete all the C-level tasks, plus task 4.
-    To receive an A, complete the B-level tasks, plus tasks 5 and 6.
+### Main.java
 
+The `Main` class serves as the central entry point of the application. It provides a user-friendly command-line interface that enables users to interact with the music library and perform various tasks.
 
-In this assignment, you'll integrate some of the pieces and components from our earlier work to develop a complete program for managing our music. Please note that, for this assignment, we'll
-be focusing on the management portion of the task. Two pieces that we won't integrate are:
-1. A tool for playing music files. The java.io.* package provides support for this, but it can be a little tricky to deal with all the different formats and codecs.
-2. A GUI for managing music. We haven't dealt much with developing graphical user interfaces in this class; the old-school way to do this would be as a standalone application using Swing, but most modern approaches instead do this inside a web browser using Javascript. 
+- `addSongsToLibFromSQL()`: Reads songs from an SQL file and adds them to the library, facilitating playlist creation.
+- `resetSongTable()`, `resetArtistTable()`, `resetAlbumTable()`: Delete and recreate tables for songs, artists, and albums in the SQL database.
+- `removeSongFromDatabase()`: Allows users to remove a song from the SQL database.
+- `addSongToLibraryAndDataBase()`: Enables users to add new songs to the library and the SQL database.
+- `addArtistToDataBase()`, `addAlbumToDataBase()`: Similar to adding songs, these methods allow users to add artists and albums to the database.
+- `createPlaylist()`, `generateGenrePlaylist()`, `generateArtistPlaylist()`: Enable playlist creation based on user preferences and export playlists to XML files.
+- `partiallySpecify()`: Allows users to search for artists' songs using MusicBrainz.
+- `displayMenu()`, `interpret()`: Control the display of menu options and user interaction.
 
-These are both great extensions, and well within your skillset, and could make for a really fun project over break to extend your expertise.
+### Song.java
 
-What we will do here is integrate some of the work from previous labs and homeworks to build a tool that can 
-manage a music collection and load information from third-party repositories. You probably have quite a bit of this 
-code developed already, so this homework will be more about polishing and integrating than new development. I've described what to accomplish in terms of specifications: that is, what your code should do.
-You can make your own design decisions about how to implement this. I encourage you to be creative, add features that you think are interesting, and have fun.
+The `Song` class represents an individual song entity. It encapsulates various attributes:
 
-The goal is to develop a program with a text-based UI that can do the following:
+- Title: The title of the song.
+- Album: The album the song belongs to.
+- Artist: The artist who performed the song.
+- Genre: The genre of the song.
+- Liked Status: Whether the song is marked as liked by the user.
 
-- Display the user's songs, artists, and albums.
-- Prompt the user for a new song, artist, or album and then fill in any missing data.
-- Generate XML files that contain a playlist based on a particular criterion, such as genre, mood, or artist.
+The class provides methods to convert song data to XML and JSON formats, interact with the SQL database for storage and retrieval, and manage liked status.
 
-Specific tasks to implement include:
+### Artist.java
 
-1. You should implement a UI that can take basic text-based commands. I will let you decide on the format for this.
-2. Your songs, artists, and albums should all be stored in a SQLite database, with separate tables for each datatype.
-3. You should be able to generate XML files containing a playlist. (you probably have this from the past lab.)
-4. Your program should allow a user to partially specify a song, artist, or album, and then use a third-party tool to fill in missing details. 
-You may use either:
-  - TheAudioDB. They have a REST-based API that returns JSON. You can find more information here: https://www.theaudiodb.com/api_guide.php
-  - MusicBrainz. They also have a REST-based API; it can return either XML or JSON. You can find more info on this here: https://musicbrainz.org/doc/MusicBrainz_API
-  
-You might also want to use these services to fill in other data, such as description, genre, running time, etc.
+The `Artist` class models an artist entity. It encapsulates the artist's name and provides methods for interaction with the SQL database, including storing and retrieving artist information.
 
-You should also include the following:
-5. Please use Javadoc to generate documentation for all of the classes in your homework. This should include a short readme explaining how to run your code.
-6. Please use maven to create and organize your project.  When you're completed, you should be able to use maven to:
-  - automatically run unit tests
-  - regenerate documentation
-  - compile a JAR.
+### Album.java
+
+The `Album` class represents an album entity. It stores information about the album's name, the artist who created it, and the number of songs in the album. Similar to other classes, it includes methods to interact with the SQL database to store and retrieve album data.
+
+### Playlist.java
+
+The `Playlist` class models a playlist containing a list of songs. It offers functionalities such as:
+
+- Adding and removing songs from the playlist.
+- Shuffling the playlist to change song order.
+- Exporting the playlist to XML or JSON formats.
+- Merging playlists to combine songs while avoiding duplicates.
+- Rearranging the playlist to put liked songs at the front.
+
+## What I Learned
+
+- Designing and implementing object-oriented classes to represent entities and their relationships.
+- Utilizing a SQL database for storing and retrieving data, including CRUD operations.
+- Creating command-line interfaces for user interaction and application control.
+- Handling XML and JSON data formats for exporting and importing data.
+- Applying various programming concepts such as inheritance, encapsulation, and polymorphism.
+
+## How to Use
+
+1. Compile the Java files using a Java compiler (e.g., `javac Main.java`).
+2. Run the application using the Java Virtual Machine (e.g., `java Main`).
+3. Follow the prompts in the command-line interface to perform various tasks with the music library.
 
